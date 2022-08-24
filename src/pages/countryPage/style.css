@@ -1,0 +1,21 @@
+.body {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+}
+
+ul {
+    padding: 20px 15px;
+    list-style: none;
+    font-size: 20px;
+}
+
+li + li {
+    margin-top: 10px;
+}
