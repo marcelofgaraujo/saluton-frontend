@@ -1,20 +1,48 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Country } from '../../model/country'
+import { Greeting } from '../../model/greeting';
 import axios from 'axios';
-import './style.css'
+import './style.css';
 
 function CountryPage() {
     const [country, setCountry] = useState<Country>();
+    const [greetings, setGreetings] = useState<any[]>();
+    // const [languageParams, setLanguageParams] = useSearchParams();
     const { Name } = useParams<string>();
+    const { Language } = useParams<string>();
 
     useEffect(() => {
-        loadCountryInfo()
+        loadCountryInfo(), loadGreeting()
     }, [])
 
+    // const getLanguageFilter = () => {
+    //     languageParams.get('language')
+    //     setLanguageParams(languageParams)
+    //     console.log(languageParams)
+    // }
+
     const loadCountryInfo = async () => {
-        const response = await axios.get<Country>(`http://localhost:3000/countryquery/${Name}`)
-        setCountry(response.data)
+        const countryResponse = await axios.get<Country>(`http://localhost:3000/countryquery/${Name}`)
+        setCountry(countryResponse.data)
+    }
+
+    const loadGreeting = async () => {
+        if (!Language) return console.error('foi possivel nao boy')
+        const langGreetings = Language.split(" ");
+        if (!langGreetings) return console.error('foi possivel nao boy')
+        const andIndex = langGreetings.findIndex(item => item === 'and')
+        andIndex > -1 ? langGreetings.splice(andIndex, 1) : ''
+        console.log(langGreetings)
+        let fetchGreetings: Greeting[] = [];
+        for (let language of langGreetings) {
+            let mockGreeting = await axios.get<Greeting>(`http://localhost:3000/greetingquery/${language}`);
+            mockGreeting.status === 200 ? fetchGreetings.push(mockGreeting.data) : console.error(`ainda nao temos um compliment em ${language}! favor aguardar a versao 2.0`)
+            console.log(mockGreeting.status)
+            //to-do: FETCH EM TODOS OS GREETINGS E DEPOIS FILTRAR GREETINGS EXISTENTES 
+        }
+        setGreetings(fetchGreetings)
+        console.log(fetchGreetings)
     }
 
     return (
