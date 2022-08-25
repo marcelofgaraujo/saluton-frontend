@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Country } from '../../model/country'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './style.css'
 
 function Home() {
     const [countries, setCountries] = useState<Country[]>();
+    // const [languageParams, setLanguageParams] = useSearchParams();
 
     useEffect(() => {
         loadData()
@@ -16,11 +17,16 @@ function Home() {
         setCountries(response.data)
     }
 
+    // const setLanguageFilter = (language: string) => {
+    //     languageParams.set('language', language)
+    //     setLanguageParams(languageParams)
+    // }
+
     return (
         <div className="App">
             {countries && countries.map((item, index) =>
-                <Link key={index} to={`${item.Name}`}>
-                    <div className="countries">{item.Name}</div>
+                <Link key={index} to={`/${item.Name}/${item.Language}`}>
+                    <div /*onClick={() => setLanguageFilter(item.Language)}*/ className="countries">{item.Name}</div>
                 </Link>
             )}
         </div>
