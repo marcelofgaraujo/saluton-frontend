@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { Country } from '../../model/country'
+import { Country } from '../../types/country'
 import { Link, useSearchParams } from 'react-router-dom'
 import './style.css'
 
