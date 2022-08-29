@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Country } from '../../model/country'
-import { Greeting } from '../../model/greeting';
+import { Country } from '../../types/country'
+import { Greeting } from '../../types/greeting';
 import axios from 'axios';
 import './style.css';
 
 function CountryPage() {
     const [country, setCountry] = useState<Country>();
-    const [greetings, setGreetings] = useState<any[]>();
+    const [greetings, setGreetings] = useState<Greeting[]>();
+    const [allGreetings, setAllGreetings] = useState<Greeting[]>();
     // const [languageParams, setLanguageParams] = useSearchParams();
-    const { Name } = useParams<string>();
-    const { Language } = useParams<string>();
+    const { Name, Language } = useParams<string>();
 
     useEffect(() => {
-        loadCountryInfo(), loadGreeting()
+        loadCountryInfo(), getAllGreetings() /*loadGreeting()*/
     }, [])
 
     // const getLanguageFilter = () => {
@@ -27,22 +27,33 @@ function CountryPage() {
         setCountry(countryResponse.data)
     }
 
+    const getAllGreetings = async () => {
+        const fetchAllGreetings = await axios.get<Greeting[]>(`http://localhost:3000/greetings`)
+        setAllGreetings(fetchAllGreetings.data)
+        loadGreeting();
+    }
+
     const loadGreeting = async () => {
+
         if (!Language) return console.error('foi possivel nao boy')
-        const langGreetings = Language.split(" ");
+        const langGreetings = Language.replace(/,/g, '').split(" ")
         if (!langGreetings) return console.error('foi possivel nao boy')
         const andIndex = langGreetings.findIndex(item => item === 'and')
-        andIndex > -1 ? langGreetings.splice(andIndex, 1) : ''
+        andIndex > -1 && langGreetings.splice(andIndex, 1)
+
         console.log(langGreetings)
+
+        let existentGreetings: string[] = []
+        if (!allGreetings) return console.error('deu nao boy')
+        allGreetings.forEach(item => existentGreetings.push(item.Language))
+        console.log(existentGreetings)
+
         let fetchGreetings: Greeting[] = [];
         for (let language of langGreetings) {
             let mockGreeting = await axios.get<Greeting>(`http://localhost:3000/greetingquery/${language}`);
-            mockGreeting.status === 200 ? fetchGreetings.push(mockGreeting.data) : console.error(`ainda nao temos um compliment em ${language}! favor aguardar a versao 2.0`)
-            console.log(mockGreeting.status)
-            //to-do: FETCH EM TODOS OS GREETINGS E DEPOIS FILTRAR GREETINGS EXISTENTES 
+            //to-do: FETCH EM TODOS OS GREETINGS E DEPOIS FILTRAR GREETINGS EXISTENTES
         }
         setGreetings(fetchGreetings)
-        console.log(fetchGreetings)
     }
 
     return (
