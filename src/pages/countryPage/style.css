@@ -19,3 +19,30 @@ ul {
 li + li {
     margin-top: 10px;
 }
+
+p {
+    text-align: center;
+    font-size: 15px;
+    padding: 0 15px;
+}
+
+input, button {
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 5px;
+}
+
+label {
+    display: none;
+}
+
+input {
+    width: 80%;
+    margin: 10px auto 5px;
+    text-indent: 3px;
+}
+
+button {
+    width: 40%;
+    margin: 0 auto;
+}
