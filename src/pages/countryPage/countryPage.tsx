@@ -19,17 +19,19 @@ function CountryPage() {
     useEffect(() => {
         loadCountryInfo(), loadGreeting()
     }, [])
-    
+
     const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        //to-do: condiçao para ajustar nome de acordo com caracteristica do país (first or last name)
         let name = e.target.value.split(" ")
         setFirstName(name[0])
         name.length > 1 && setLastName(name[1])
     }
 
-    const handleNameReplace = (string: string) => {
-        string.replace('[first name]', firstName!)
-        lastName && string.replace('[last name]', lastName)
-        return string
+    const handleNameReplace = (string: string): string => {
+        if (firstName && lastName) {
+            let newString = string.replace(/first name/g, firstName).replace(/last name/g, lastName);
+            return newString
+        } else return string
     }
 
     // const getLanguageFilter = () => {
@@ -77,25 +79,29 @@ function CountryPage() {
                 <li><b>Time Zone:</b> {country && country.Time_Zone}</li>
                 <li><b>Cultural aspects:</b> {country && country.Insights_into_cultural_aspects}</li>
             </ul>
-            {greetings && greetings.length < 1 ? <p>sorry, we don't find greetings for this country :[ (yet...)</p> :
+            {greetings && greetings.length < 1 ? <p>sorry, we can't find any greetings for this country :[ (yet...)</p> :
                 <>
                     <label htmlFor='name'>Name:</label>
-                    <input name='name' onChange={(e) => handleName(e)} placeholder='type first and last name' type={'text'} />
+                    <input name='name' onChange={(e) => handleName(e)} placeholder='type first and/or last name' type={'text'} />
                     <button onClick={() => setClicked(true)}>Generate greetings</button>
-                    {clicked && 
+                    {clicked &&
                         <>
                             {
-                                greetings && greetings.map((item, index) => {
+                                greetings && greetings.map((item, index) =>
                                     <div key={index}>
-                                        <li><b>Language:</b> {item.Language}</li>
-                                        <li><b>Men:</b> {handleNameReplace(item.Greeting_Men)}</li>
-                                        <li><b>Women:</b> {handleNameReplace(item.Greeting_Women)}</li>
-                                        <li><b>Dear Sir or Madam:</b> {handleNameReplace(item.Dear_Sir_or_Madam)}</li>
+                                        <h2>{item.Language} greetings</h2>
+                                        <ul>
+                                            <li><b>Men:</b> {handleNameReplace(item.Greeting_Men)}</li>
+                                            <li><b>Women:</b> {handleNameReplace(item.Greeting_Women)}</li>
+                                            <li><b>Dear Sir or Madam:</b> {handleNameReplace(item.Dear_Sir_or_Madam)}</li>
+                                        </ul>
                                     </div>
-                                })
+                                )
                             }
-                        </>}
-                </>}
+                        </>
+                    }
+                </>
+            }
         </div>
     )
 }
