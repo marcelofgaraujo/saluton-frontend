@@ -1,5 +1,4 @@
 .body {
-    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -8,6 +7,17 @@
 h1 {
     text-align: center;
     font-size: 50px;
+    margin-top: 25px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 15px;
+}
+
+h2 + ul {
+    margin-bottom: -20px;
 }
 
 ul {
