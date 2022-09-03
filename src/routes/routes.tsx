@@ -5,6 +5,6 @@ import CountryPage from '../pages/countryPage/countryPage'
 export const RouteList = () => {
     return useRoutes([
         {path:'/', element:<Home/>},
-        {path:'/:Name/:Language', element: <CountryPage/>}
+        {path:'/:name', element: <CountryPage/>}
     ])
 }
