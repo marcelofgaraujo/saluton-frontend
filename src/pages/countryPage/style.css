@@ -20,6 +20,12 @@ h2 + ul {
     margin-bottom: -20px;
 }
 
+h3 {
+    font-size: 25px;
+    margin-top: 100%;
+    text-align: center;
+}
+
 ul {
     padding: 20px 15px;
     list-style: none;
