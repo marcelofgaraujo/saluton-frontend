@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Country } from '../../types/country'
 import { Greeting } from '../../types/greeting';
@@ -9,8 +9,9 @@ function CountryPage() {
     const [country, setCountry] = useState<Country>();
     const [greetings, setGreetings] = useState<Greeting[]>();
     const [firstName, setFirstName] = useState<string>();
-    const [loading, setLoading] = useState<boolean>(false);
     const [lastName, setLastName] = useState<string>();
+    const [fullName, setFullName] = useState<string>();
+    const [loading, setLoading] = useState<boolean>(false);
     const [clicked, setClicked] = useState<boolean>(false);
     const { name } = useParams<string>();
 
@@ -18,22 +19,30 @@ function CountryPage() {
         loadCountryInfo()
     }, [])
 
-    const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //to-do: condiçao para ajustar nome de acordo com caracteristica do país (first or last name)
-        let name = e.target.value.split(" ")
-        setFirstName(name[0])
-        name.length > 1 && setLastName(name[1])
+    const handleName = () => {
+        if (!country) return console.error("this country don't exists! (i mean don't exists on my database yet, geographically it probably exists)")
+        if (!fullName) return console.error("please give me a name!")
+        let name = fullName.split(" ")
+        const emptyString = name.findIndex(str => str === "")
+        emptyString > -1 && name.splice(emptyString, 1)
+        if (name.length === 1) {
+            country.First_or_last_name === 'First' ? setFirstName(name[0]) : setLastName(name[0])
+        } else {
+            setFirstName(name[0])
+            setLastName(name[name.length - 1])
+        }
+        setClicked(true)
     }
 
     const handleNameReplace = (string: string): string => {
-        if (firstName && lastName) {
-            let newString = string.replace(/\[first name\]/g, firstName).replace(/\[last name\]/g, lastName);
+        if (!firstName && !lastName) return string
+        if (country?.Name === 'Czech Republic') {
+            let newString = string.replace(/\[last name\]/g, lastName!).replace('[last name + _ or ov_]', `${lastName!}_ (or ${lastName!}ov_)`);
             return newString
-        } else return string
-    }
-
-    const handleClick = () => {
-        setClicked(true)
+        } else {
+            let newString = string.replace(/\[first name\]/g, firstName!).replace(/\[last name\]/g, lastName!);
+            return newString
+        }
     }
 
     const loadCountryInfo = async () => {
@@ -45,9 +54,7 @@ function CountryPage() {
 
     const loadGreeting = async (lang: string) => {
         // tratamento de dados - array de linguagens do país
-        if (!lang) return console.error('foi possivel nao boy')
         const langGreetings: string[] = lang.replace(/,/g, '').split(" ")
-        if (!langGreetings) return console.error('foi possivel nao boy')
         const andIndex = langGreetings.findIndex(item => item === 'and')
         andIndex > -1 && langGreetings.splice(andIndex, 1)
 
@@ -83,8 +90,8 @@ function CountryPage() {
                 {greetings && greetings.length < 1 ? <p>sorry, we can't find any greetings for this country :[ (yet...)</p> :
                     <>
                         <label htmlFor='name'>Name:</label>
-                        <input name='name' onChange={(e) => handleName(e)} placeholder='type first and/or last name' type={'text'} />
-                        <button onClick={handleClick}>Generate greetings</button>
+                        <input name='name' onChange={(e) => setFullName(e.target.value)} placeholder='type first and/or last name' type={'text'} />
+                        <button onClick={handleName}>Generate greetings</button>
                         {clicked &&
                             <>
                                 {
