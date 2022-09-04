@@ -21,10 +21,12 @@ function CountryPage() {
 
     const handleName = () => {
         if (!country) return console.error("this country don't exists! (i mean don't exists on my database yet, geographically it probably exists)")
-        if (!fullName) return console.error("please give me a name!")
+        if (!fullName) return alert("please give me a name!")
         let name = fullName.split(" ")
-        const emptyString = name.findIndex(str => str === "")
-        emptyString > -1 && name.splice(emptyString, 1)
+        const emptyStringIndex = name.findIndex(str => str === "")
+        emptyStringIndex > -1 && name.splice(emptyStringIndex, 1)
+        const emptyString = name.includes("")
+        if (emptyString) return alert("please give me a name!")
         if (name.length === 1) {
             country.First_or_last_name === 'First' ? setFirstName(name[0]) : setLastName(name[0])
         } else {
