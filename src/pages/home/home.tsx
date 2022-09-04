@@ -17,7 +17,8 @@ function Home() {
     }
 
     return (
-        <div className="App">
+        <div className="homeBody">
+            <h1 className='title'>Saluton</h1>
             {countries && countries.map((item, index) =>
                 <Link key={index} to={`/${item.Name}`}>
                     <div className="countries">{item.Name}</div>
