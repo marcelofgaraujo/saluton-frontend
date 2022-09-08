@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { useState, useEffect, useContext } from 'react'
 import { Country } from '../../types/country'
 import { Link } from 'react-router-dom'
+import { api } from '../../services/api'
 import './style.css'
 
 function Home() {
@@ -12,8 +12,8 @@ function Home() {
     }, [])
 
     const loadData = async () => {
-        const response = await axios.get<Country[]>(`http://localhost:3000/countries`)
-        setCountries(response.data)
+        let response = await api.getAllCountries()
+        setCountries(response)
     }
 
     return (
