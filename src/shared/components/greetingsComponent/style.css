@@ -1,9 +1,22 @@
 h2 {
     text-align: center;
     font-size: 35px;
-    margin-top: 15px;
 }
 
-h2 + ul {
-    margin-bottom: -20px;
+.copy {
+    height: 23px;
+    width: 23px;
+    border: 1px solid black;
+    cursor: pointer;
+    background-image: url('../../../assets/copy.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+    position: absolute;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.list-greetings {
+    padding: 20px 30px 20px 15px;
 }
