@@ -24,18 +24,18 @@ function CountryPage() {
 
     const handleName = () => {
 
-        if (!country) return console.error("this country don't exists! (i mean don't exists on my database yet, geographically it probably exists)")
-        if (!fullName) return alert("please give me a name!")
+        if (!country) return console.error("This country don't exists! (I mean don't exists on my database yet, geographically it probably exists)")
+        if (!fullName) return alert("Please give me a name!")
 
         let name = fullName.split(" ")
         while (name.includes("")) {
             let emptyIndex = name.findIndex(str => str === "")
             name.splice(emptyIndex, 1)
         }
-        if (name.length === 0) return alert("please give me a name!")
+        if (name.length === 0) return alert("Please give me a name!")
 
         for (let str of name) {
-            if (!regEx.test(str)) return alert("please insert a valid name!")
+            if (!regEx.test(str)) return alert("Please insert a valid name!")
         }
 
         if (name.length === 1) {
@@ -53,15 +53,23 @@ function CountryPage() {
 
         if (country?.Name === 'Czech Republic') {
             let newString = string
-            .replace(/\[last name\]/g, lastName!)
-            .replace('[last name + _ or ov_]', `${lastName!}_ (or ${lastName!}ov_)`);
+            .replace(/\[last name\]/g, capitalizeString(lastName!))
+            .replace('[last name + _ or ov_]', `${capitalizeString(lastName!)}_ (or ${capitalizeString(lastName!)}ov_)`);
             return newString
         } else {
             let newString = string
-            .replace(/\[first name\]/g, firstName!)
-            .replace(/\[last name\]/g, lastName!);
+            .replace(/\[first name\]/g, capitalizeString(firstName!))
+            .replace(/\[last name\]/g, capitalizeString(lastName!));
             return newString
         }
+    }
+
+    const capitalizeString = (string: string): string => {
+        
+        if (!string) return string
+
+        let newString = string[0].toUpperCase() + string.slice(1)
+        return newString
     }
 
     const loadCountryInfo = async () => {
@@ -83,7 +91,7 @@ function CountryPage() {
 
         let existentGreetings: Greeting[] = [];
         for (let language of langGreetings) {
-            if (ALL_GREETINGS.some((item) => item.Language === language)) {
+            if (ALL_GREETINGS.some(item => item.Language === language)) {
                 let fetchGreeting = await api.getGreetingByLang(language)
                 existentGreetings.push(fetchGreeting)
             }
@@ -96,6 +104,7 @@ function CountryPage() {
     return (
 
         loading ? <h3>ŝarĝo...</h3> :
+
             <div className='body'>
 
                 <CountryComponent country={country && country} />
