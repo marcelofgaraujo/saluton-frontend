@@ -34,7 +34,7 @@ input {
 
 button {
     width: 40%;
-    margin: 0 auto;
+    margin: 0 auto 15px;
     cursor: pointer;
     transition: 0.5s;
 }
@@ -48,5 +48,9 @@ button:hover {
     .body {
         max-width: 500px;
         margin: auto;
+    }
+
+    h3 {
+        margin-top: 35%;
     }
 }
