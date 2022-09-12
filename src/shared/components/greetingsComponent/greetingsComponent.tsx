@@ -9,7 +9,7 @@ type Props = {
 
 const handleCopy = (string: string) => {
     copy(string)
-    return alert('Greeting sucessfully copied to clipboard!')
+    return alert('Greeting successfully copied to clipboard!')
 }
 
 export const GreetingsComponent = ({ data, replaceName }: Props) => {
@@ -18,7 +18,7 @@ export const GreetingsComponent = ({ data, replaceName }: Props) => {
 
         <div>
             <h2>{data.Language} greetings</h2>
-            <ul className="list-greetings">
+            <ul className="greetings-list">
                 <li>
                     <b>Men:</b> {replaceName(data.Greeting_Men)}
                     <div className="copy" onClick={() => handleCopy(replaceName(data.Greeting_Men))} title={'Copy to clipboard'} />
