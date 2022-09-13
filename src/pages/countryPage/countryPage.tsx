@@ -27,11 +27,8 @@ function CountryPage() {
         if (!country) return console.error("This country don't exists! (I mean don't exists on my database yet, geographically it probably exists)")
         if (!fullName) return alert("Please give me a name!")
 
-        let name = fullName.split(" ")
-        while (name.includes("")) {
-            let emptyIndex = name.findIndex(str => str === "")
-            name.splice(emptyIndex, 1)
-        }
+        let name = fullName.split(" ").filter(str => str !== "")
+
         if (name.length === 0) return alert("Please give me a name!")
 
         for (let str of name) {
@@ -68,6 +65,11 @@ function CountryPage() {
         
         if (!string) return string
 
+        if (string[1] === "'") {
+            let newString = string[0].toUpperCase() + string[1] + string[2].toUpperCase() + string.slice(3)
+            return newString
+        }
+
         let newString = string[0].toUpperCase() + string.slice(1)
         return newString
     }
@@ -83,9 +85,7 @@ function CountryPage() {
 
     const loadGreeting = async (lang: string) => {
 
-        const langGreetings: string[] = lang.replace(/,/g, '').split(" ")
-        const andIndex = langGreetings.findIndex(item => item === 'and')
-        andIndex > -1 && langGreetings.splice(andIndex, 1)
+        const langGreetings: string[] = lang.replace(/,/g, '').split(" ").filter(str => str !== 'and')
 
         const ALL_GREETINGS = await api.getAllGreetings()
 
